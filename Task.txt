@@ -1,0 +1,64 @@
+
+Task 1:
+function fibonacci(n) {
+  if (n <= 1) {
+    return n;
+  }
+  
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+console.log(fibonacci(6)); // Output: 8
+
+
+
+
+
+Task 2:
+function fibonacci(n, memo = {}) {
+  if (n in memo) {
+    return memo[n];
+  }
+  
+  if (n <= 1) {
+    return n;
+  }
+  
+  memo[n] = fibonacci(n - 1, memo) + fibonacci(n - 2, memo);
+  return memo[n];
+}
+console.log(fibonacci(50)); // Output: 12586269025
+
+
+Task 3:
+
+function getBalancedSubstrings(S) {
+  const n = S.length;
+  const balancedSubstrings = new Map(); // Use a Map to keep track of the longest balanced substrings
+  
+  for (let i = 0; i < n; i++) {
+    const charCount = {};
+    
+    for (let j = i; j < n; j++) {
+      const char = S.charAt(j);
+      charCount[char] = charCount[char] ? charCount[char] + 1 : 1;
+      
+      if (Object.keys(charCount).length === 2 && 
+          Math.min(...Object.values(charCount)) * 2 === j - i + 1) {
+        const balancedSubstring = S.slice(i, j + 1);
+        const length = balancedSubstring.length;
+        
+        if (!balancedSubstrings.has(length)) {
+          balancedSubstrings.set(length, []);
+        }
+        
+        balancedSubstrings.get(length).push(balancedSubstring);
+      }
+    }
+  }
+  
+  const maxLength = Math.max(...balancedSubstrings.keys());
+  return balancedSubstrings.get(maxLength) || [];
+}
+const S = "abababa";
+const longestBalancedSubstrings = getBalancedSubstrings(S);
+console.log(longestBalancedSubstrings); // Output: ["ababab", "bababa"]
